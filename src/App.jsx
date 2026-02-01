@@ -1,94 +1,73 @@
 import React, { useState } from "react";
 import "./styles/app.css";
 
-// Components
 import Header from "./Components/Header";
 import StudentInfo from "./Components/StudentInfo";
-import HydrationEntry from "./Components/HydrationEntry";
-import HydrationTable from "./Components/HydrationTable";
-import WeekSummary from "./Components/WeekSummary";
+import ScreenTimeEntry from "./Components/ScreenTimeEntry";
+import ScreenTimeTable from "./Components/ScreenTimeTable";
+import WeekSummary from "./Components/WeekSummary"; // ✅ Make sure this matches filename
 
-// Week template
 import weekTemplate from "./data/WeekTemplate";
 
 function App() {
-  // -------------------------------
-  // State
-  // -------------------------------
   const [studentName, setStudentName] = useState("");
-  const [hydrationData, setHydrationData] = useState({ ...weekTemplate });
+  const [screenData, setScreenData] = useState({ ...weekTemplate });
   const [selectedDay, setSelectedDay] = useState("Day 1");
 
-  // -------------------------------
-  // Download CSV Function
-  // -------------------------------
-  function downloadHydrationCSV() {
-    const rows = [["Student", "Day", "Water Intake (oz)", "Notes"]];
-    Object.entries(hydrationData).forEach(([day, entry]) => {
+  // CSV DOWNLOAD ✅
+  function downloadCSV() {
+    const rows = [["Student", "Day", "Screen Time (hrs)", "Notes"]];
+
+    Object.entries(screenData).forEach(([day, entry]) => {
       rows.push([
         studentName || "Unknown",
         day,
-        entry.water || "",
+        entry.hours || "",
         entry.notes || ""
       ]);
     });
 
-    const csvContent = "data:text/csv;charset=utf-8," + rows.map(r => r.join(",")).join("\n");
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      rows.map(r => r.join(",")).join("\n");
+
     const link = document.createElement("a");
     link.href = encodeURI(csvContent);
-    link.download = "weekly_hydration_log.csv";
+    link.download = "screen_time_challenge.csv";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   }
 
-  // -------------------------------
-  // Calculate Completion Points
-  // -------------------------------
   function calculateCompletionPoints() {
-    const totalDays = Object.keys(hydrationData).length;
-    const completedDays = Object.values(hydrationData).filter(
-      (entry) => entry.water || entry.notes
+    const completed = Object.values(screenData).filter(
+      e => e.hours || e.notes
     ).length;
 
-    return ((completedDays / totalDays) * 10).toFixed(1);
+    return ((completed / 5) * 10).toFixed(1);
   }
-
-  // -------------------------------
-  // Render
-  // -------------------------------
+const completionPoints = calculateCompletionPoints();
   return (
     <div className="app">
       <Header />
       <StudentInfo studentName={studentName} setStudentName={setStudentName} />
 
-      <HydrationEntry
-        hydrationData={hydrationData}
-        setHydrationData={setHydrationData}
+      <ScreenTimeEntry
+        screenData={screenData}
+        setScreenData={setScreenData}
         selectedDay={selectedDay}
         setSelectedDay={setSelectedDay}
       />
 
-      <HydrationTable hydrationData={hydrationData} />
+      <ScreenTimeTable screenData={screenData} />
 
-      <WeekSummary
-        hydrationData={hydrationData}
-        completionPoints={calculateCompletionPoints()}
-      />
+     <WeekSummary
+  screenData={screenData}
+  completionPoints={calculateCompletionPoints()}
+/>
 
-      {/* Download CSV Button */}
-      <div className="download-section" style={{ textAlign: "center", marginTop: "20px" }}>
-        <button
-          onClick={downloadHydrationCSV}
-          style={{
-            padding: "10px 20px",
-            fontWeight: "bold",
-            borderRadius: "6px",
-            backgroundColor: "#1E90FF",
-            color: "#fff",
-            border: "none"
-          }}
-        >
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <button onClick={downloadCSV}>
           Download CSV
         </button>
       </div>

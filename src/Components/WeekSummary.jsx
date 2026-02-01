@@ -1,40 +1,47 @@
 import React from "react";
 
-export default function WeekSummary({ hydrationData, completionPoints }) {
-  const entries = Object.values(hydrationData);
+export default function WeekSummary({
+  screenData = {},
+  completionPoints = 0
+}) {
+  const entries = Object.values(screenData || {});
+
+  if (entries.length === 0) {
+    return <p>No data yet for this week.</p>;
+  }
 
   const completedDays = entries.filter(
-    (entry) => entry.water || entry.notes
+    entry => entry?.hours || entry?.notes
   ).length;
 
-  const totalWater = entries
-    .map((e) => Number(e.water))
-    .filter((w) => !isNaN(w))
-    .reduce((a, b) => a + b, 0);
-
-  const avgWater =
+  const avgHours =
     completedDays > 0
-      ? (totalWater / completedDays).toFixed(1)
+      ? (
+          entries.reduce(
+            (sum, entry) => sum + Number(entry?.hours || 0),
+            0
+          ) / entries.length
+        ).toFixed(1)
       : "-";
 
   return (
-    <div className="WeekSummary">
-      <h3>Weekly Hydration Summary</h3>
+    <div style={{ marginTop: "20px" }}>
+      <h3>Weekly Summary</h3>
 
       <p>
-        <strong>Days Logged:</strong> {completedDays} / 5
+        <strong>Days Completed:</strong> {completedDays} / 5
       </p>
 
       <p>
-        <strong>Average Water Intake:</strong> {avgWater} oz per day
+        <strong>Average Screen Time:</strong> {avgHours} hrs/day
       </p>
 
       <p>
-        <strong>Completion Score:</strong> {completionPoints} / 10
+        <strong>Completion Points:</strong> {completionPoints} / 10
       </p>
 
-      <p style={{ marginTop: "10px", fontStyle: "italic" }}>
-        Hydration builds awareness and healthy habits — consistency matters more than perfection.
+      <p style={{ fontStyle: "italic", marginTop: "10px" }}>
+        This challenge is about awareness and balance — not perfection.
       </p>
     </div>
   );

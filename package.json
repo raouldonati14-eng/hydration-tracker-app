@@ -1,9 +1,9 @@
 {
-  "name": "hydration-tracker-app",
-  "version": "1.0.0",
+  "name": "screen-time-challenge-app",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
-  "description": "5-day Hydration Tracker for students to log water intake and weekly summary.",
+  "description": "Weekly Screen Time Challenge tracker for students",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
