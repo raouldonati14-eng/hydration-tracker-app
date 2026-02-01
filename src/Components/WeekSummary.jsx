@@ -1,39 +1,40 @@
 import React from "react";
 
-export default function WeekSummary({ moodData, completionPoints }) {
-  const entries = Object.values(moodData);
+export default function WeekSummary({ hydrationData, completionPoints }) {
+  const entries = Object.values(hydrationData);
 
   const completedDays = entries.filter(
-    (entry) => entry.mood || entry.emotion || entry.stress || entry.notes
+    (entry) => entry.water || entry.notes
   ).length;
 
-  const moods = entries
-    .map((e) => Number(e.mood))
-    .filter((m) => !isNaN(m));
+  const totalWater = entries
+    .map((e) => Number(e.water))
+    .filter((w) => !isNaN(w))
+    .reduce((a, b) => a + b, 0);
 
-  const avgMood =
-    moods.length > 0
-      ? (moods.reduce((a, b) => a + b, 0) / moods.length).toFixed(1)
+  const avgWater =
+    completedDays > 0
+      ? (totalWater / completedDays).toFixed(1)
       : "-";
 
   return (
     <div className="WeekSummary">
-      <h3>Weekly Reflection Summary</h3>
+      <h3>Weekly Hydration Summary</h3>
 
       <p>
-        <strong>Days Completed:</strong> {completedDays} / 5
+        <strong>Days Logged:</strong> {completedDays} / 5
       </p>
 
       <p>
-        <strong>Average Mood Rating:</strong> {avgMood} / 5
+        <strong>Average Water Intake:</strong> {avgWater} oz per day
       </p>
 
       <p>
-        <strong>Completion Points:</strong> {completionPoints} / 10
+        <strong>Completion Score:</strong> {completionPoints} / 10
       </p>
 
       <p style={{ marginTop: "10px", fontStyle: "italic" }}>
-        This journal is about awareness, honesty, and reflection — not perfection.
+        Hydration builds awareness and healthy habits — consistency matters more than perfection.
       </p>
     </div>
   );

@@ -4,8 +4,8 @@ import "./styles/app.css";
 // Components
 import Header from "./Components/Header";
 import StudentInfo from "./Components/StudentInfo";
-import MoodEntry from "./Components/MoodEntry";
-import MoodTable from "./Components/MoodTable";
+import HydrationEntry from "./Components/HydrationEntry";
+import HydrationTable from "./Components/HydrationTable";
 import WeekSummary from "./Components/WeekSummary";
 
 // Week template
@@ -16,21 +16,19 @@ function App() {
   // State
   // -------------------------------
   const [studentName, setStudentName] = useState("");
-  const [moodData, setMoodData] = useState({ ...weekTemplate });
+  const [hydrationData, setHydrationData] = useState({ ...weekTemplate });
   const [selectedDay, setSelectedDay] = useState("Day 1");
 
   // -------------------------------
   // Download CSV Function
   // -------------------------------
-  function downloadMoodCSV() {
-    const rows = [["Student", "Day", "Mood", "Emotion", "Stress", "Notes"]];
-    Object.entries(moodData).forEach(([day, entry]) => {
+  function downloadHydrationCSV() {
+    const rows = [["Student", "Day", "Water Intake (oz)", "Notes"]];
+    Object.entries(hydrationData).forEach(([day, entry]) => {
       rows.push([
         studentName || "Unknown",
         day,
-        entry.mood || "",
-        entry.emotion || "",
-        entry.stress || "",
+        entry.water || "",
         entry.notes || ""
       ]);
     });
@@ -38,7 +36,7 @@ function App() {
     const csvContent = "data:text/csv;charset=utf-8," + rows.map(r => r.join(",")).join("\n");
     const link = document.createElement("a");
     link.href = encodeURI(csvContent);
-    link.download = "weekly_mood_journal.csv";
+    link.download = "weekly_hydration_log.csv";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -48,9 +46,9 @@ function App() {
   // Calculate Completion Points
   // -------------------------------
   function calculateCompletionPoints() {
-    const totalDays = Object.keys(moodData).length;
-    const completedDays = Object.values(moodData).filter(
-      (entry) => entry.mood || entry.emotion || entry.stress || entry.notes
+    const totalDays = Object.keys(hydrationData).length;
+    const completedDays = Object.values(hydrationData).filter(
+      (entry) => entry.water || entry.notes
     ).length;
 
     return ((completedDays / totalDays) * 10).toFixed(1);
@@ -64,24 +62,24 @@ function App() {
       <Header />
       <StudentInfo studentName={studentName} setStudentName={setStudentName} />
 
-      <MoodEntry
-        moodData={moodData}
-        setMoodData={setMoodData}
+      <HydrationEntry
+        hydrationData={hydrationData}
+        setHydrationData={setHydrationData}
         selectedDay={selectedDay}
         setSelectedDay={setSelectedDay}
       />
 
-      <MoodTable moodData={moodData} />
+      <HydrationTable hydrationData={hydrationData} />
 
       <WeekSummary
-        moodData={moodData}
+        hydrationData={hydrationData}
         completionPoints={calculateCompletionPoints()}
       />
 
       {/* Download CSV Button */}
       <div className="download-section" style={{ textAlign: "center", marginTop: "20px" }}>
         <button
-          onClick={downloadMoodCSV}
+          onClick={downloadHydrationCSV}
           style={{
             padding: "10px 20px",
             fontWeight: "bold",

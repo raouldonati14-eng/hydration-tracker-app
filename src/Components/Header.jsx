@@ -3,8 +3,8 @@ import React from "react";
 export default function Header() {
   return (
     <header>
-      <h1>Mood & Emotional Journal</h1>
-      <p>Reflect on your mood, emotions, and stress levels each day.</p>
+     <h1>Weekly Hydration Tracker</h1>
+<p>Track your daily water intake and build healthy hydration habits!</p>
     </header>
   );
 }
