@@ -4,47 +4,23 @@ import "./styles/app.css";
 // Components
 import Header from "./Components/Header";
 import StudentInfo from "./Components/StudentInfo";
-import SleepEntry from "./Components/SleepEntry";
-import SleepTable from "./Components/SleepTable";
-import Summary from "./Components/Summary";
+import MoodEntry from "./Components/MoodEntry";
+import MoodTable from "./Components/MoodTable";
+import WeekSummary from "./Components/WeekSummary";
 
 // Week template
 import weekTemplate from "./data/WeekTemplate";
 
 function App() {
   const [studentName, setStudentName] = useState("");
-  const [sleepData, setSleepData] = useState({ ...weekTemplate });
-  const [selectedDay, setSelectedDay] = useState("Sunday");
-
-  // Download CSV
-  function downloadSleepCSV() {
-    let rows = [["Student", "Day", "Bedtime", "Wake-up", "Hours Slept"]];
-    Object.entries(sleepData).forEach(([day, entry]) => {
-      rows.push([
-        studentName || "Unknown",
-        day,
-        entry.bedtime || "",
-        entry.wakeup || "",
-        entry.hours || ""
-      ]);
-    });
-
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      rows.map((r) => r.join(",")).join("\n");
-    const link = document.createElement("a");
-    link.href = encodeURI(csvContent);
-    link.download = "weekly_sleep_log.csv";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+  const [moodData, setMoodData] = useState({ ...weekTemplate });
+  const [selectedDay, setSelectedDay] = useState("Day 1");
 
   // Calculate completion points out of 10
   function calculateCompletionPoints() {
-    const totalDays = Object.keys(sleepData).length;
-    const completedDays = Object.values(sleepData).filter(
-      (entry) => entry.bedtime && entry.wakeup
+    const totalDays = Object.keys(moodData).length;
+    const completedDays = Object.values(moodData).filter(
+      (entry) => entry.mood || entry.emotion || entry.stress || entry.notes
     ).length;
 
     return ((completedDays / totalDays) * 10).toFixed(1);
@@ -55,20 +31,19 @@ function App() {
       <Header />
       <StudentInfo studentName={studentName} setStudentName={setStudentName} />
 
-      <SleepEntry
-        sleepData={sleepData}
-        setSleepData={setSleepData}
+      <MoodEntry
+        moodData={moodData}
+        setMoodData={setMoodData}
         selectedDay={selectedDay}
         setSelectedDay={setSelectedDay}
       />
 
-      <SleepTable sleepData={sleepData} />
+      <MoodTable moodData={moodData} />
 
-      <Summary sleepData={sleepData} completionPoints={calculateCompletionPoints()} />
-
-      <div className="download-section">
-        <button onClick={downloadSleepCSV}>Download CSV</button>
-      </div>
+      <WeekSummary
+        moodData={moodData}
+        completionPoints={calculateCompletionPoints()}
+      />
     </div>
   );
 }

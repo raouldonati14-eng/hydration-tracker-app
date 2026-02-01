@@ -1,10 +1,11 @@
+// src/data/WeekTemplate.js
+
 const weekTemplate = {
-  Monday: { hours: "", quality: "" },
-  Tuesday: { hours: "", quality: "" },
-  Wednesday: { hours: "", quality: "" },
-  Thursday: { hours: "", quality: "" },
-  Friday: { hours: "", quality: "" },
-  Saturday: { hours: "", quality: "" },
-  Sunday: { hours: "", quality: "" }
- };
-  export default weekTemplate;
+  "Day 1": {},
+  "Day 2": {},
+  "Day 3": {},
+  "Day 4": {},
+  "Day 5": {}
+};
+
+export default weekTemplate;

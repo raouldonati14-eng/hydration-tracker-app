@@ -1,9 +1,9 @@
 {
   "name": "mood-journal-app",
   "version": "0.0.1",
-  "description": "5-day Mood & Emotional Journal for students",
   "private": true,
   "type": "module",
+  "description": "5-day Mood & Emotional Journal for students",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
