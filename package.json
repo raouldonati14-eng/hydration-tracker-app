@@ -1,6 +1,7 @@
 {
-  "name": "sleeplog",
+  "name": "mood-journal-app",
   "version": "0.0.1",
+  "description": "5-day Mood & Emotional Journal for students",
   "private": true,
   "type": "module",
   "scripts": {
@@ -15,5 +16,8 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^5.1.2",
     "vite": "^4.5.0"
+  },
+  "engines": {
+    "node": "24.x"
   }
 }
